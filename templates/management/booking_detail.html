@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}Booking Details: {{ booking.booking_code|stringformat:".8s" }}... - Watad Management{% endblock %}
+
+{% block content %}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">Booking Details</h1>
+    <div>
+        <a href="{% url 'management:booking_list' %}" class="text-blue-600 hover:underline mr-4">&larr; Back to Bookings</a>
+        <a href="{% url 'management:booking_receipt_pdf' booking.pk %}" target="_blank" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out mr-2">
+            View PDF Receipt
+        </a>
+        <a href="{% url 'management:booking_update' booking.pk %}" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
+            Edit Booking
+        </a>
+        {# Add Cancel Button if applicable #}
+        {% if booking.status == 'booked' %}
+        <form method="post" action="{% url 'management:booking_cancel' booking.pk %}" class="inline-block ml-2" onsubmit="return confirm('Are you sure you want to cancel this booking?');">
+            {% csrf_token %}
+            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
+                Cancel Booking
+            </button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Left Column: Booking & Customer Info -->
+    <div class="lg:col-span-2 space-y-6">
+        <!-- Booking Info -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold text-gray-700 mb-4 border-b pb-2">Booking Information</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <p><strong class="text-gray-600">Booking Code:</strong> {{ booking.booking_code }}</p>
+                <p><strong class="text-gray-600">Status:</strong> 
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                        {% if booking.status == 'booked' %} bg-blue-100 text-blue-800 
+                        {% elif booking.status == 'completed' %} bg-green-100 text-green-800 
+                        {% elif booking.status == 'cancelled' %} bg-red-100 text-red-800 
+                        {% elif booking.status == 'refunded' %} bg-yellow-100 text-yellow-800 
+                        {% else %} bg-gray-100 text-gray-800 {% endif %}">
+                        {{ booking.get_status_display }}
+                    </span>
+                </p>
+                <p><strong class="text-gray-600">Project:</strong> {{ booking.project.name }}</p>
+                <p><strong class="text-gray-600">Unit:</strong> {{ booking.unit.unit_code }}</p>
+                <p><strong class="text-gray-600">Start Date:</strong> {{ booking.start_date|date:"Y-m-d" }}</p>
+                <p><strong class="text-gray-600">End Date:</strong> {{ booking.end_date|date:"Y-m-d" }}</p>
+                <p><strong class="text-gray-600">Duration:</strong> {{ booking.duration_days }} days</p>
+                <p><strong class="text-gray-600">Booking Time:</strong> {{ booking.booking_datetime|date:"Y-m-d H:i" }}</p>
+            </div>
+        </div>
+
+        <!-- Customer Info -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold text-gray-700 mb-4 border-b pb-2">Customer Information</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <p><strong class="text-gray-600">Name:</strong> <a href="{% url 'management:customer_detail' booking.customer.pk %}" class="text-blue-600 hover:underline">{{ booking.customer.name }}</a></p>
+                <p><strong class="text-gray-600">Mobile:</strong> {{ booking.customer.mobile }}</p>
+                <p><strong class="text-gray-600">Nationality:</strong> {{ booking.customer.nationality|default:"N/A" }}</p>
+                <p><strong class="text-gray-600">ID Number:</strong> {{ booking.customer.id_number|default:"N/A" }}</p>
+                <p><strong class="text-gray-600">WhatsApp:</strong> {{ booking.customer.whatsapp|default:"N/A" }}</p>
+                <p><strong class="text-gray-600">Email:</strong> {{ booking.customer.email|default:"N/A" }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column: Financial Summary -->
+    <div class="lg:col-span-1 space-y-6">
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold text-gray-700 mb-4 border-b pb-2">Financial Summary (SAR)</h2>
+            <div class="space-y-2 text-sm">
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Price Per Day:</span>
+                    <span>{{ booking.price_per_day|floatformat:2 }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Duration (Days):</span>
+                    <span>{{ booking.duration_days }}</span>
+                </div>
+                <div class="flex justify-between border-t pt-1">
+                    <span class="text-gray-600">Total Base Price:</span>
+                    <span>{{ booking.total_base_price|floatformat:2 }}</span>
+                </div>
+                {% if booking.discount_amount > 0 or booking.discount_percentage > 0 %}
+                <div class="flex justify-between text-red-600">
+                    <span class="text-gray-600">Discount Amount:</span>
+                    <span>-{{ booking.discount_amount|floatformat:2 }}</span>
+                </div>
+                <div class="flex justify-between text-red-600">
+                    <span class="text-gray-600">Discount Percentage:</span>
+                    <span>-{{ booking.discount_percentage|floatformat:2 }}%</span>
+                </div>
+                <div class="flex justify-between text-red-600 border-t pt-1">
+                    <span class="text-gray-600">Total Discount:</span>
+                    <span>-{{ booking.total_discount|floatformat:2 }}</span>
+                </div>
+                {% endif %}
+                
+                {% if booking_services %}
+                <div class="border-t pt-2 mt-2">
+                    <h3 class="text-md font-semibold text-gray-700 mb-1">Additional Services:</h3>
+                    {% for bs in booking_services %}
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-600">{{ bs.quantity }}x {{ bs.service.name }} (@{{ bs.price_at_booking|floatformat:2 }})</span>
+                        <span>{{ bs.price_at_booking|floatformat:2 }}</span>
+                    </div>
+                    {% endfor %}
+                    <div class="flex justify-between font-semibold border-t pt-1 mt-1">
+                        <span class="text-gray-600">Total Service Cost:</span>
+                        <span>{{ booking.total_service_cost|floatformat:2 }}</span>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="flex justify-between font-bold text-lg border-t-2 pt-2 mt-2">
+                    <span class="text-gray-800">Final Amount Due:</span>
+                    <span>{{ booking.final_amount|floatformat:2 }}</span>
+                </div>
+                <div class="flex justify-between text-green-700">
+                    <span class="text-gray-600">Amount Paid:</span>
+                    <span>{{ booking.amount_paid|floatformat:2 }}</span>
+                </div>
+                 <div class="flex justify-between {% if booking.remaining_amount > 0 %}text-red-700{% else %}text-gray-700{% endif %} font-semibold border-t pt-1">
+                    <span class="text-gray-600">Remaining Amount:</span>
+                    <span>{{ booking.remaining_amount|floatformat:2 }}</span>
+                </div>
+                <div class="flex justify-between border-t pt-2 mt-2">
+                    <span class="text-gray-600">Payment Method:</span>
+                    <span>{{ booking.get_payment_method_display|default:"N/A" }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

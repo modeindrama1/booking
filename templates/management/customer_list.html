@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Customers - Watad Management{% endblock %}
+
+{% block content %}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">Customer Management</h1>
+    <a href="{% url 'management:customer_add' %}" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
+        Add New Customer
+    </a>
+</div>
+
+<div class="bg-white p-6 rounded-lg shadow-md mb-6">
+    <h2 class="text-xl font-semibold text-gray-700 mb-4">Search Customers</h2>
+    <input type="text" name="q" placeholder="Search by Name or Mobile..."
+           class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
+           hx-get="{% url 'management:customer_search' %}?context=list"
+           hx-trigger="keyup changed delay:500ms"
+           hx-target="#customer-list-results"
+           hx-indicator="#search-indicator">
+    <span id="search-indicator" class="htmx-indicator ml-2 text-sm text-gray-500">Searching...</span>
+</div>
+
+<div id="customer-list-results" class="bg-white p-6 rounded-lg shadow-md">
+    {% include 'management/partials/customer_search_results.html' with customers=customers %}
+    <p class="text-gray-600 mt-4">Enter a name or mobile number above to search for customers.</p>
+</div>
+
+{% endblock %}
+

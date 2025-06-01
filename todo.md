@@ -1,0 +1,28 @@
+# Watad Project Management App Todo List
+
+- [X] Initialize Django project
+- [X] Set up Tailwind CSS, Alpine.js, HTMX (Initial setup, integration pending views)
+- [X] Create `management` Django app
+- [X] Define database models (Project, Unit, Service, Customer, Booking, BookingService)
+- [X] Register models in Django Admin
+- [X] Customize Django Admin views
+- [X] Add `management` app to `INSTALLED_APPS`
+- [X] Run database migrations
+- [ ] Create Django superuser (Manual step for user)
+- [X] Implement Admin CRUD for Projects
+- [X] Implement Admin CRUD for Units (linked to Projects)
+- [X] Implement Admin CRUD for Services
+- [X] Implement Customer Management (Search, Add, View)
+- [X] Implement Booking Workflow (Select Project/Unit, Add Customer, Dates, Price, Payment) - Backend Logic
+- [X] Implement Additional Services in Booking
+- [X] Implement Discount logic in Booking
+- [X] Implement PDF Receipt Generation (using FPDF2 or WeasyPrint) - Backend Logic
+- [X] Implement Email Sending for Receipts (to mygd@gmail.com and customer)
+- [X] Implement Financial Reports (by period/day)
+- [X] Implement Project-specific Reports
+- [X] Implement Unit-specific Reports
+- [X] Implement Discount Reports
+- [X] Implement Deletion/Refund Reports
+- [X] Implement User Interface with Tailwind/Alpine/HTMX (Templates Created)
+- [X] Testing and Validation (Basic functionality implemented, further testing recommended)
+- [ ] Deployment (Code packaged, deployment instructions provided)

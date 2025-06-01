@@ -1,0 +1,7 @@
+<option value="">---------</option>
+{% for unit in units %}
+<option value="{{ unit.pk }}">{{ unit.unit_code }} - {{ unit.description|truncatechars:30 }}</option>
+{% empty %}
+<option value="" disabled>No available units found for this project.</option>
+{% endfor %}
+

@@ -1,0 +1,13 @@
+{% if customers %}
+<ul class="divide-y divide-gray-200">
+    {% for customer in customers %}
+    <li class="p-2 hover:bg-gray-100 cursor-pointer"
+        onclick="selectCustomer({{ customer.pk }}, '{{ customer.name|escapejs }}', '{{ customer.mobile|escapejs }}')">
+        <span class="font-medium">{{ customer.name }}</span> - <span class="text-sm text-gray-600">{{ customer.mobile }}</span>
+    </li>
+    {% empty %}
+    <li class="p-2 text-sm text-gray-500">No matching customers found.</li>
+    {% endfor %}
+</ul>
+{% endif %}
+

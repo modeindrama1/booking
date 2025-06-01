@@ -1,0 +1,11 @@
+<div class="bg-blue-50 border border-blue-200 p-3 rounded-md">
+    <h3 class="text-md font-semibold text-blue-800">Selected Customer:</h3>
+    <p class="text-sm text-gray-700"><strong>Name:</strong> {{ customer.name }}</p>
+    <p class="text-sm text-gray-700"><strong>Mobile:</strong> {{ customer.mobile }}</p>
+    <p class="text-sm text-gray-700"><strong>ID Number:</strong> {{ customer.id_number|default:"N/A" }}</p>
+    {# Pass the selected customer ID back to the main form #}
+    <input type="hidden" name="customer_id" value="{{ customer.pk }}">
+    {# Optionally add a button to change customer #}
+    {# <button type="button" onclick="resetCustomerSelection()" class="mt-2 text-xs text-red-600 hover:underline">Change Customer</button> #}
+</div>
+

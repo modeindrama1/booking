@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Reports - Watad Management{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-6 text-gray-800">Reports Dashboard</h1>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    
+    <a href="{% url 'management:financial_report' %}" class="block p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+        <h2 class="text-xl font-semibold text-sky-700 mb-2">Financial Report</h2>
+        <p class="text-gray-600 text-sm">View overall financial performance, revenue, and bookings within a date range.</p>
+    </a>
+
+    <a href="{% url 'management:project_report' %}" class="block p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+        <h2 class="text-xl font-semibold text-teal-700 mb-2">Project Report</h2>
+        <p class="text-gray-600 text-sm">Analyze booking counts and revenue generated per project.</p>
+    </a>
+
+    <a href="{% url 'management:unit_report' %}" class="block p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+        <h2 class="text-xl font-semibold text-indigo-700 mb-2">Unit Report</h2>
+        <p class="text-gray-600 text-sm">Track performance and booking history for individual units.</p>
+    </a>
+
+    <a href="{% url 'management:discount_report' %}" class="block p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+        <h2 class="text-xl font-semibold text-amber-700 mb-2">Discount Report</h2>
+        <p class="text-gray-600 text-sm">Review all bookings where discounts were applied.</p>
+    </a>
+
+    <a href="{% url 'management:cancellation_refund_report' %}" class="block p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+        <h2 class="text-xl font-semibold text-red-700 mb-2">Cancellations & Refunds</h2>
+        <p class="text-gray-600 text-sm">List all cancelled or refunded bookings.</p>
+    </a>
+
+</div>
+{% endblock %}
+

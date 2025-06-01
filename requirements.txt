@@ -1,0 +1,7 @@
+asgiref
+defusedxml
+Django
+fonttools
+fpdf2
+pillow
+sqlparse
